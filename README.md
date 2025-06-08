@@ -1,103 +1,89 @@
-# Smart Walking Cane App Documentation
+# Documentação do App Smart Walking Cane
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Este é um projeto [Expo](https://expo.dev) criado com [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Overview
+## Visão Geral
 
-This React Native (Expo) app connects to an ESP32 device via Bluetooth Low Energy (BLE), receives RFID/NFC UIDs, and plays specific audio files mapped to each UID.
-It is designed to assist visually impaired users by providing audio cues when RFID tags are detected.
-
-## Main Features
-
--   **BLE Scanning & Connection:**  
-    Scans for BLE devices named `ESP32_RFID` and connects automatically.
-
--   **UID Notification Subscription:**  
-    Subscribes to a BLE characteristic to receive UID data from the ESP32.
-
--   **Audio Playback:**  
-    Plays a specific audio file for each recognized UID.
-
--   **Logging:**  
-    Displays connection status, received UIDs, and errors in a log list.
+Este aplicativo React Native (Expo) conecta-se a um dispositivo ESP32 via Bluetooth Low Energy (BLE), recebe UIDs de RFID/NFC e reproduz arquivos de áudio específicos mapeados para cada UID.  
+Ele foi projetado para auxiliar pessoas com deficiência visual, fornecendo sinais sonoros quando etiquetas RFID são detectadas.
 
 ---
 
-## How It Works
+## Como Funciona
 
-1. **Scan and Connect:**
+1. **Escanear e Conectar:**
 
-    - Press the button to start scanning for BLE devices.
-    - The app looks for devices with names containing `ESP32_RFID`.
-    - On finding the device, it connects and discovers services/characteristics.
+    - Pressione o botão para iniciar a busca por dispositivos BLE.
+    - O app procura por dispositivos com nomes contendo `ESP32_RFID`.
+    - Ao encontrar o dispositivo, conecta e descobre os serviços/características.
 
-2. **Subscribe to UID Notifications:**
+2. **Assinar Notificações de UID:**
 
-    - Subscribes to notifications on the characteristic with UUID `6E400003-B5A3-F393-E0A9-E50E24DCCA9E`.
-    - When a UID is received (as base64), it is converted to a hex string.
+    - Assina notificações na característica com UUID `6E400003-B5A3-F393-E0A9-E50E24DCCA9E`.
+    - Quando um UID é recebido (em base64), ele é convertido para uma string hexadecimal.
 
-3. **Play Audio:**
+3. **Reproduzir Áudio:**
 
-    - If the UID matches an entry in `UID_AUDIO_MAP`, the corresponding audio file is played using `expo-av`.
+    - Se o UID corresponder a uma entrada em `UID_AUDIO_MAP`, o arquivo de áudio correspondente é reproduzido usando `expo-av`.
 
-4. **Logging:**
-    - All actions and errors are logged and displayed in the app.
+4. **Log:**
+    - Todas as ações e erros são registrados e exibidos no app.
 
 ---
 
-## Get started
+## Primeiros Passos
 
-1. Install dependencies
+1. Instale as dependências
 
     ```bash
     npm install
     ```
 
-2. Start the app
+2. Inicie o app
 
     ```bash
     npx expo start
     ```
 
-## Build with EAS
+## Build com EAS
 
-To prepare and build your app for production using [EAS Build](https://docs.expo.dev/build/introduction/):
+Para preparar e construir seu app para produção usando [EAS Build](https://docs.expo.dev/build/introduction/):
 
-1. **Install EAS CLI**
+1. **Instale o EAS CLI**
 
     ```bash
     npm install -g eas-cli
     ```
 
-2. **Login to Expo**
+2. **Faça login no Expo**
 
     ```bash
     eas login
     ```
 
-3. **Build your app**
+3. **Construa seu app**
 
-    - For Android:
+    - Para Android:
         ```bash
         eas build --platform android --profile development
         ```
 
-Follow the prompts to set up credentials and build profiles as needed.
+Siga as instruções para configurar credenciais e perfis de build conforme necessário.
 
 ---
 
-## BLE Details
+## Detalhes do BLE
 
 -   **Service UUID:**  
     `6E400001-B5A3-F393-E0A9-E50E24DCCA9E`
 -   **Characteristic UUID:**  
-    `6E400003-B5A3-F393-E0A9-E50E24DCCA9E` (must support notifications)
+    `6E400003-B5A3-F393-E0A9-E50E24DCCA9E` (deve suportar notificações)
 
 ---
 
-## Audio Mapping
+## Mapeamento de Áudio
 
-Edit the `UID_AUDIO_MAP` object to map UIDs (as uppercase hex strings) to audio files in your audio directory:
+Edite o objeto `UID_AUDIO_MAP` para mapear UIDs (em strings hexadecimais maiúsculas) para arquivos de áudio no seu diretório de áudio:
 
 ```tsx
 const UID_AUDIO_MAP: Record<string, AVPlaybackSource> = {
@@ -108,27 +94,27 @@ const UID_AUDIO_MAP: Record<string, AVPlaybackSource> = {
 
 ---
 
-## Customization
+## Personalização
 
--   **Add more UIDs:**  
-    Add new entries to `UID_AUDIO_MAP` with the UID as the key and the audio file as the value.
--   **Change BLE UUIDs:**  
-    Update `SERVICE_UUID` and `CHARACTERISTIC_UUID` if your ESP32 uses different values.
-
----
-
-## Troubleshooting
-
--   **BLE connection issues:**  
-    Ensure the ESP32 is advertising and the UUIDs match.
--   **No audio for UID:**  
-    Make sure the UID is mapped in `UID_AUDIO_MAP` and the audio file exists.
--   **Permissions:**  
-    Ensure your app has Bluetooth and location permissions on Android.
+-   **Adicionar mais UIDs:**  
+    Adicione novas entradas em `UID_AUDIO_MAP` com o UID como chave e o arquivo de áudio como valor.
+-   **Alterar UUIDs do BLE:**  
+    Atualize `SERVICE_UUID` e `CHARACTERISTIC_UUID` caso seu ESP32 utilize valores diferentes.
 
 ---
 
-## Dependencies
+## Solução de Problemas
+
+-   **Problemas de conexão BLE:**  
+    Certifique-se de que o ESP32 está anunciando (advertising) e que os UUIDs estão corretos.
+-   **Sem áudio para o UID:**  
+    Verifique se o UID está mapeado em `UID_AUDIO_MAP` e se o arquivo de áudio existe.
+-   **Permissões:**  
+    Certifique-se de que seu app possui permissões de Bluetooth e localização no Android.
+
+---
+
+## Dependências
 
 -   [expo-av](https://docs.expo.dev/versions/latest/sdk/av/)
 -   [react-native-ble-plx](https://github.com/dotintent/react-native-ble-plx)
@@ -136,15 +122,14 @@ const UID_AUDIO_MAP: Record<string, AVPlaybackSource> = {
 
 ---
 
-## ESP32 Code
+## Código ESP32
 
 ```cpp
-
 /**********************************************************************
  * Filename    : BLE_USART
- * Description : Esp32 communicates with the phone by BLE and sends incoming RFID data via a serial port
- * Author      : www.freenove.com + Hash Fall + Levy + SimTum
- * Modification: 2025/06/08
+ * Description : Esp32 se comunica com o celular via BLE e envia dados RFID recebidos pela serial
+ * Autor       : www.freenove.com + Hash Fall + Levy + SimTum
+ * Modificação : 2025/06/08
 **********************************************************************/
 #include "BLEDevice.h"
 #include "BLEServer.h"
@@ -268,11 +253,10 @@ void loop() {
     delay(2000);
   }
 }
-
 ```
 
 ---
 
-## License
+## Licença
 
 MIT
