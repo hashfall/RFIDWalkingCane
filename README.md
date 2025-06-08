@@ -275,4 +275,4 @@ void loop() {
 
 ## License
 
-MIT (or your project’s license)
+MIT
