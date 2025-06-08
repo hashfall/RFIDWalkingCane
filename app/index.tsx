@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer';
 import { Audio, AVPlaybackSource } from 'expo-av';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Button, FlatList, StyleSheet, Text, View } from 'react-native';
