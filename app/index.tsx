@@ -7,11 +7,10 @@ import { BleManager, Device } from 'react-native-ble-plx';
 const SERVICE_UUID = '6E400001-B5A3-F393-E0A9-E50E24DCCA9E';
 const CHARACTERISTIC_UUID = '6E400003-B5A3-F393-E0A9-E50E24DCCA9E';
 
-// Map NFC UIDs to audio file URIs (place your audio files in assets/audio/)
+// Mapeamento RFID UIDs para arquivos de audio (URIs)
 const UID_AUDIO_MAP: Record<string, AVPlaybackSource> = {
-    //"04AABBCCDD": require("../assets/audio/uid1.mp3"),
-    //"04EEFF0011": require("../assets/audio/uid2.mp3"),
-    // Add more mappings as needed
+    '30623A63613A33663A3032': require('../assets/audio/escada.mp3'),
+    '31333A31313A39663A3134': require('../assets/audio/laboratorio01.mp3'),
 };
 
 export default function App() {
@@ -42,8 +41,8 @@ export default function App() {
                 setIsScanning(false);
                 return;
             }
-            // You may want to filter by device name or service UUID
-            if (device?.name?.includes('ESP32')) {
+            // Filtrando por device name ou Service UUID
+            if (device?.name?.includes('ESP32_RFID')) {
                 bleManager.stopDeviceScan();
                 logMsg(`Dispositivo encontrado: ${device.name}`);
                 try {
@@ -75,6 +74,7 @@ export default function App() {
                         .toString('hex')
                         .toUpperCase();
                     logMsg('Recebido UID: ' + uid);
+                    console.log('Received UID:', uid);
                     setReceivedUid(uid);
                     playAudioForUid(uid);
                 }
