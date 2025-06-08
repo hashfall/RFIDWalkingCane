@@ -1,6 +1,49 @@
-# Welcome to your Expo app 👋
+# Smart Walking Cane App Documentation
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+
+## Overview
+
+This React Native (Expo) app connects to an ESP32 device via Bluetooth Low Energy (BLE), receives RFID/NFC UIDs, and plays specific audio files mapped to each UID.
+It is designed to assist visually impaired users by providing audio cues when RFID tags are detected.
+
+## Main Features
+
+-   **BLE Scanning & Connection:**  
+    Scans for BLE devices named `ESP32_RFID` and connects automatically.
+
+-   **UID Notification Subscription:**  
+    Subscribes to a BLE characteristic to receive UID data from the ESP32.
+
+-   **Audio Playback:**  
+    Plays a specific audio file for each recognized UID.
+
+-   **Logging:**  
+    Displays connection status, received UIDs, and errors in a log list.
+
+---
+
+## How It Works
+
+1. **Scan and Connect:**
+
+    - Press the button to start scanning for BLE devices.
+    - The app looks for devices with names containing `ESP32_RFID`.
+    - On finding the device, it connects and discovers services/characteristics.
+
+2. **Subscribe to UID Notifications:**
+
+    - Subscribes to notifications on the characteristic with UUID `6E400003-B5A3-F393-E0A9-E50E24DCCA9E`.
+    - When a UID is received (as base64), it is converted to a hex string.
+
+3. **Play Audio:**
+
+    - If the UID matches an entry in `UID_AUDIO_MAP`, the corresponding audio file is played using `expo-av`.
+
+4. **Logging:**
+    - All actions and errors are logged and displayed in the app.
+
+---
 
 ## Get started
 
@@ -15,17 +58,6 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
     ```bash
     npx expo start
     ```
-
-In the output, you'll find options to open the app in a
-
--   [development build](https://docs.expo.dev/develop/development-builds/introduction/)
--   [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
--   [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
--   [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
----
 
 ## Build with EAS
 
@@ -54,19 +86,55 @@ Follow the prompts to set up credentials and build profiles as needed.
 
 ---
 
-## Learn more
+## BLE Details
 
-To learn more about developing your project with Expo, look at the following resources:
+-   **Service UUID:**  
+    `6E400001-B5A3-F393-E0A9-E50E24DCCA9E`
+-   **Characteristic UUID:**  
+    `6E400003-B5A3-F393-E0A9-E50E24DCCA9E` (must support notifications)
 
--   [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
--   [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## Audio Mapping
 
-Join our community of developers creating universal apps.
+Edit the `UID_AUDIO_MAP` object to map UIDs (as uppercase hex strings) to audio files in your audio directory:
 
--   [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
--   [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```tsx
+const UID_AUDIO_MAP: Record<string, AVPlaybackSource> = {
+    '30623A63613A33663A3032': require('../assets/audio/escada.mp3'),
+    '31333A31313A39663A3134': require('../assets/audio/laboratorio01.mp3'),
+};
+```
+
+---
+
+## Customization
+
+-   **Add more UIDs:**  
+    Add new entries to `UID_AUDIO_MAP` with the UID as the key and the audio file as the value.
+-   **Change BLE UUIDs:**  
+    Update `SERVICE_UUID` and `CHARACTERISTIC_UUID` if your ESP32 uses different values.
+
+---
+
+## Troubleshooting
+
+-   **BLE connection issues:**  
+    Ensure the ESP32 is advertising and the UUIDs match.
+-   **No audio for UID:**  
+    Make sure the UID is mapped in `UID_AUDIO_MAP` and the audio file exists.
+-   **Permissions:**  
+    Ensure your app has Bluetooth and location permissions on Android.
+
+---
+
+## Dependencies
+
+-   [expo-av](https://docs.expo.dev/versions/latest/sdk/av/)
+-   [react-native-ble-plx](https://github.com/dotintent/react-native-ble-plx)
+-   [buffer](https://www.npmjs.com/package/buffer)
+
+---
 
 ## ESP32 Code
 
@@ -202,3 +270,9 @@ void loop() {
 }
 
 ```
+
+---
+
+## License
+
+MIT (or your project’s license)
