@@ -1,5 +1,6 @@
 import { Buffer } from 'buffer';
 import { Audio, AVPlaybackSource } from 'expo-av';
+import Location from 'expo-location';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Button, FlatList, StyleSheet, Text, View } from 'react-native';
 import { BleManager, Device } from 'react-native-ble-plx';
@@ -22,6 +23,23 @@ export default function App() {
     const soundRef = useRef<Audio.Sound | null>(null);
 
     useEffect(() => {
+        // Requisição de permissões para utilizar Bluetooth ao iniciar o app
+        (async () => {
+            // Checa o status atual das permissões de localização
+            let { status } = await Location.getForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                // Requisita permissões de localização
+                const { status: requestStatus } =
+                    await Location.requestForegroundPermissionsAsync();
+                if (requestStatus !== 'granted') {
+                    Alert.alert(
+                        'Permissão necessária',
+                        'A permissão de localização é necessária para usar o Bluetooth.'
+                    );
+                }
+            }
+        })();
+
         return () => {
             bleManager.destroy();
             if (soundRef.current) {
