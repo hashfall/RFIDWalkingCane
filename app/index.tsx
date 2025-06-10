@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 import { Audio, AVPlaybackSource } from 'expo-av';
-import Location from 'expo-location';
+import * as Location from 'expo-location';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Button, FlatList, StyleSheet, Text, View } from 'react-native';
 import { BleManager, Device } from 'react-native-ble-plx';

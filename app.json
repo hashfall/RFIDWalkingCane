@@ -22,7 +22,8 @@
                 "BLUETOOTH_ADMIN",
                 "BLUETOOTH_SCAN",
                 "BLUETOOTH_CONNECT",
-                "ACCESS_FINE_LOCATION"
+                "ACCESS_FINE_LOCATION",
+                "NEARBY_WIFI_DEVICES"
             ],
             "package": "com.hashfall.RFIDWalkingCane"
         },
