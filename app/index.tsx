@@ -4,6 +4,11 @@ import * as Location from 'expo-location';
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Button, FlatList, StyleSheet, Text, View } from 'react-native';
 import { BleManager, Device } from 'react-native-ble-plx';
+import {
+    PERMISSIONS,
+    requestMultiple,
+    RESULTS,
+} from 'react-native-permissions';
 
 const SERVICE_UUID = '6E400001-B5A3-F393-E0A9-E50E24DCCA9E';
 const CHARACTERISTIC_UUID = '6E400003-B5A3-F393-E0A9-E50E24DCCA9E';
@@ -13,6 +18,14 @@ const UID_AUDIO_MAP: Record<string, AVPlaybackSource> = {
     '30623A63613A33663A3032': require('../assets/audio/escada.mp3'),
     '31333A31313A39663A3134': require('../assets/audio/laboratorio01.mp3'),
 };
+
+const permissions = [
+    PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
+    PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
+    PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+    PERMISSIONS.ANDROID.NEARBY_WIFI_DEVICES,
+    PERMISSIONS.IOS.BLUETOOTH,
+];
 
 export default function App() {
     const [bleManager] = useState(() => new BleManager());
@@ -39,6 +52,37 @@ export default function App() {
                 }
             }
         })();
+
+        requestMultiple(permissions)
+            .then((result) => {
+                if (
+                    result[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] ===
+                        RESULTS.GRANTED &&
+                    result[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] ===
+                        RESULTS.GRANTED &&
+                    result[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
+                        RESULTS.GRANTED &&
+                    result[PERMISSIONS.ANDROID.NEARBY_WIFI_DEVICES] ===
+                        RESULTS.GRANTED
+                ) {
+                    //VAZIO
+                } else if (
+                    result[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] ===
+                        RESULTS.DENIED ||
+                    result[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] ===
+                        RESULTS.DENIED ||
+                    result[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
+                        RESULTS.DENIED ||
+                    result[PERMISSIONS.ANDROID.NEARBY_WIFI_DEVICES] ===
+                        RESULTS.DENIED
+                ) {
+                    Alert.alert(
+                        'Permissão necessária',
+                        'A permissão de Dispositivos Próximos é necessária para usar o Bluetooth.'
+                    );
+                }
+            })
+            .catch((error) => {});
 
         return () => {
             bleManager.destroy();

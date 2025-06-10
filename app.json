@@ -1,22 +1,12 @@
 {
     "expo": {
-        "name": "RFIDWalkingCane",
-        "slug": "RFIDWalkingCane",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "icon": "./assets/images/icon.png",
-        "scheme": "rfidwalkingcane",
-        "userInterfaceStyle": "automatic",
-        "newArchEnabled": true,
-        "ios": {
-            "supportsTablet": true
-        },
         "android": {
             "adaptiveIcon": {
-                "foregroundImage": "./assets/images/adaptive-icon.png",
-                "backgroundColor": "#ffffff"
+                "backgroundColor": "#ffffff",
+                "foregroundImage": "./assets/images/adaptive-icon.png"
             },
             "edgeToEdgeEnabled": true,
+            "package": "com.hashfall.RFIDWalkingCane",
             "permissions": [
                 "BLUETOOTH",
                 "BLUETOOTH_ADMIN",
@@ -24,35 +14,56 @@
                 "BLUETOOTH_CONNECT",
                 "ACCESS_FINE_LOCATION",
                 "NEARBY_WIFI_DEVICES"
-            ],
-            "package": "com.hashfall.RFIDWalkingCane"
+            ]
         },
-        "web": {
-            "bundler": "metro",
-            "output": "static",
-            "favicon": "./assets/images/favicon.png"
+        "experiments": {
+            "typedRoutes": true
         },
+        "extra": {
+            "eas": {
+                "projectId": "da2e1e89-b57b-43f1-8b20-36bb998fe91d"
+            },
+            "router": {}
+        },
+        "icon": "./assets/images/icon.png",
+        "ios": {
+            "infoPlist": {
+                "NSBluetoothAlwaysUsageDescription": "This app uses Bluetooth to connect to your walking cane.",
+                "NSBluetoothPeripheralUsageDescription": "This app uses Bluetooth to connect to your walking cane.",
+                "NSLocationWhenInUseUsageDescription": "Location is required for Bluetooth scanning."
+            },
+            "supportsTablet": true
+        },
+        "name": "RFIDWalkingCane",
+        "newArchEnabled": true,
+        "orientation": "portrait",
         "plugins": [
             "expo-router",
             [
                 "expo-splash-screen",
                 {
+                    "backgroundColor": "#ffffff",
                     "image": "./assets/images/splash-icon.png",
                     "imageWidth": 200,
-                    "resizeMode": "contain",
-                    "backgroundColor": "#ffffff"
+                    "resizeMode": "contain"
                 }
             ],
-            "react-native-ble-plx"
+            "react-native-ble-plx",
+            [
+                "react-native-permissions",
+                {
+                    "iosPermissions": ["Bluetooth"]
+                }
+            ]
         ],
-        "experiments": {
-            "typedRoutes": true
-        },
-        "extra": {
-            "router": {},
-            "eas": {
-                "projectId": "da2e1e89-b57b-43f1-8b20-36bb998fe91d"
-            }
+        "scheme": "rfidwalkingcane",
+        "slug": "RFIDWalkingCane",
+        "userInterfaceStyle": "automatic",
+        "version": "1.0.0",
+        "web": {
+            "bundler": "metro",
+            "favicon": "./assets/images/favicon.png",
+            "output": "static"
         }
     }
 }
